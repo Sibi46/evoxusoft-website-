@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 class JobAdminTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        app.config.update(TESTING=True, SECRET_KEY='test-only-session-key', DATABASE=str(Path(self.temp.name) / 'test.sqlite3'))
+        app.config.update(TESTING=True, SECRET_KEY='test-only-session-key', ADMIN_USERNAME='admin', DATABASE=str(Path(self.temp.name) / 'test.sqlite3'))
         init_db()
         with db() as conn:
             conn.execute('INSERT INTO admin (id,password_hash,must_change) VALUES (1,?,0)', (generate_password_hash('test-admin-password'),))
@@ -37,6 +37,13 @@ class JobAdminTests(unittest.TestCase):
         self.assertEqual(self.client.get('/admin', base_url='https://localhost').status_code, 302)
         self.assertEqual(self.client.post('/admin/jobs/new', data={'status': 'open'}, base_url='https://localhost').status_code, 400)
         self.assertEqual(self.client.get('/api/jobs').json, {'jobs': []})
+
+    def test_configured_username(self):
+        app.config['ADMIN_USERNAME'] = 'evoxu'
+        self.assertEqual(self.login().status_code, 401)
+        token = self.csrf()
+        response = self.client.post('/admin/login', data={'csrf': token, 'username': 'evoxu', 'password': 'test-admin-password'}, base_url='https://localhost')
+        self.assertEqual(response.status_code, 302)
 
     def test_publish_edit_close_and_reopen(self):
         self.assertEqual(self.login().status_code, 302)

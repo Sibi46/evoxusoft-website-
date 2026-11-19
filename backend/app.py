@@ -14,6 +14,7 @@ app = Flask(__name__)
 app.config.update(
     SECRET_KEY=os.environ.get('EVOXU_SECRET_KEY'),
     DATABASE=os.environ.get('EVOXU_DATABASE', '/var/lib/evoxuind/jobs.sqlite3'),
+    ADMIN_USERNAME=os.environ.get('EVOXU_ADMIN_USERNAME', 'admin'),
     SESSION_COOKIE_NAME='evoxu_admin', SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SECURE=True, SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=timedelta(hours=4), MAX_CONTENT_LENGTH=64 * 1024,
@@ -104,7 +105,7 @@ def login():
         if attempts >= 8:
             return render_template('login.html', error='Too many attempts. Please wait 15 minutes.'), 429
         admin = admin_record()
-        if request.form.get('username') == 'admin' and admin and check_password_hash(admin['password_hash'], request.form.get('password', '')):
+        if request.form.get('username') == app.config['ADMIN_USERNAME'] and admin and check_password_hash(admin['password_hash'], request.form.get('password', '')):
             session.clear()
             session.permanent = True
             session['admin_version'] = admin['version']
