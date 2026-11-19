@@ -87,3 +87,33 @@ input,select,textarea{font-size:16px;font-weight:500}
 .leadership-signature{font-family:Manrope,sans-serif;font-size:clamp(24px,2.8vw,38px);font-weight:700;line-height:1.4;letter-spacing:-.8px;margin:45px 0 0}
 .leadership-signature strong{color:#b7e4d1;font-weight:800}
 @media(max-width:720px){.leadership-columns{grid-template-columns:1fr;gap:0}.leadership-invitation{flex-direction:column;align-items:start;gap:24px}.leadership-subtitle{font-size:22px;margin-bottom:30px}.leadership-columns .leadership-callout{font-size:20px}.leadership-invitation p{font-size:20px}}
+
+/* Projects and participant stories. */
+.perfume{background:#efe4e8;color:#61384a;flex-direction:column;line-height:1.25;font-size:42px;letter-spacing:5px}
+.perfume span{font-size:15px;letter-spacing:5px;margin-top:8px}
+.oxfox{background:#dfe6ef;color:#263b59;flex-direction:column;font-size:40px;line-height:1.2;letter-spacing:2px}
+.oxfox span{font-size:16px;letter-spacing:8px;margin-top:8px}
+.stories{background:#f1f4ef}
+.stories>.eyebrow,.voices-heading .eyebrow{color:var(--teal)}
+.journey-stories{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:22px;margin-top:38px}
+.journey-story{grid-column:span 2;border-top:3px solid var(--teal);padding:25px 0 12px}
+.journey-story:nth-last-child(-n+2){grid-column:span 3}
+.journey-story h3{font-size:25px;line-height:1.35;letter-spacing:-.7px}
+.journey-story blockquote{margin:0}
+.journey-story p{font-size:18px;line-height:1.8;color:var(--muted);margin-bottom:0}
+.voices-heading{padding-top:65px;margin-top:40px;border-top:1px solid #14263d25}
+.testimonials{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:35px}
+.testimonial{margin:0;background:#fff;border:1px solid #14263d12;border-radius:8px;padding:30px;display:flex;flex-direction:column}
+.testimonial:last-child{grid-column:1/-1}
+.quote-mark{font-family:Georgia,serif;color:var(--teal);font-size:64px;line-height:.9}
+.testimonial blockquote{margin:10px 0 28px;flex:1}
+.testimonial blockquote p{font-size:18px;line-height:1.8;color:var(--muted);margin:0}
+.testimonial blockquote strong{color:var(--navy);font-weight:700}
+.testimonial figcaption{display:flex;align-items:center;gap:15px;border-top:1px solid #14263d15;padding-top:22px}
+.person-initials{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border-radius:50%;background:var(--mint);color:var(--teal);font-size:16px;font-weight:800}
+.testimonial figcaption strong{display:block;font-size:18px;font-weight:800;line-height:1.5}
+.person-role{display:block;font-size:14px;font-weight:600;color:var(--muted);line-height:1.6}
+.stories-invitation{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-top:36px}
+.stories-invitation p{font-size:23px;font-weight:700;margin:0}
+@media(max-width:900px){.journey-stories{grid-template-columns:1fr 1fr}.journey-story,.journey-story:nth-last-child(-n+2){grid-column:auto}.journey-story:last-child{grid-column:1/-1}}
+@media(max-width:720px){.journey-stories,.testimonials{grid-template-columns:1fr}.journey-story:last-child,.testimonial:last-child{grid-column:auto}.journey-story{padding-top:22px}.testimonial{padding:25px}.voices-heading{padding-top:45px;margin-top:30px}.stories-invitation{flex-direction:column;align-items:start}.stories-invitation p{font-size:22px}.ventures a{overflow-wrap:anywhere}}
