@@ -141,3 +141,14 @@ input,select,textarea{font-size:16px;font-weight:500}
 .public-job summary{font-size:16px;font-weight:700}
 .jobs-message{grid-column:1/-1;font-size:18px;color:var(--muted)}
 @media(max-width:720px){#jobs-list{grid-template-columns:1fr}.public-job{padding:24px}.career-openings{padding-top:35px}}
+
+/* In-page enquiry feedback. */
+.enquiry-honeypot{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap}
+#form-status:empty{display:none}
+#form-status:not(:empty){padding:14px 16px;border-radius:5px;line-height:1.7}
+#form-status.form-status-pending{background:#e8eff4;color:var(--navy)}
+#form-status.form-status-success{background:#dff3eb;color:#145d3e}
+#form-status.form-status-error{background:#fbe8e8;color:#8a2525}
+.form-email-fallback{font-size:15px;color:var(--muted);line-height:1.7}
+.form-email-fallback a{font-weight:700;text-decoration:underline;color:var(--teal);overflow-wrap:anywhere}
+#enquiry button:disabled{opacity:.7;cursor:wait;transform:none}
