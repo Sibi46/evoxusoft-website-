@@ -128,3 +128,16 @@ input,select,textarea{font-size:16px;font-weight:500}
 .soil-soul span{font-size:17px;letter-spacing:7px;margin-top:8px}
 
 .pincode{font-size:clamp(18px,1.9vw,28px);letter-spacing:-1px}.pincode span{font-size:.65em}@media(max-width:720px){.pincode{font-size:clamp(22px,6vw,32px)}}
+
+/* Live career openings. */
+.career-openings{grid-column:1/-1;min-width:0;border-top:1px solid #14263d25;padding-top:45px;margin-top:10px}
+#jobs-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.public-job{padding:28px;background:var(--paper);border:1px solid #14263d20;border-radius:7px;min-width:0}
+.public-job .eyebrow{color:var(--teal);margin-bottom:12px}
+.public-job h3{font-size:27px;line-height:1.3;letter-spacing:-.6px;overflow-wrap:anywhere;margin-bottom:12px}
+.public-job .job-meta{font-size:16px!important;font-weight:600;color:var(--navy)!important}
+.public-job details{padding:15px 0;margin:0 0 24px}
+.public-job .job-description{white-space:pre-wrap;overflow-wrap:anywhere}
+.public-job summary{font-size:16px;font-weight:700}
+.jobs-message{grid-column:1/-1;font-size:18px;color:var(--muted)}
+@media(max-width:720px){#jobs-list{grid-template-columns:1fr}.public-job{padding:24px}.career-openings{padding-top:35px}}
