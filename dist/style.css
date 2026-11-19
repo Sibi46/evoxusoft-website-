@@ -117,3 +117,8 @@ input,select,textarea{font-size:16px;font-weight:500}
 .stories-invitation p{font-size:23px;font-weight:700;margin:0}
 @media(max-width:900px){.journey-stories{grid-template-columns:1fr 1fr}.journey-story,.journey-story:nth-last-child(-n+2){grid-column:auto}.journey-story:last-child{grid-column:1/-1}}
 @media(max-width:720px){.journey-stories,.testimonials{grid-template-columns:1fr}.journey-story:last-child,.testimonial:last-child{grid-column:auto}.journey-story{padding-top:22px}.testimonial{padding:25px}.voices-heading{padding-top:45px;margin-top:30px}.stories-invitation{flex-direction:column;align-items:start}.stories-invitation p{font-size:22px}.ventures a{overflow-wrap:anywhere}}
+
+[hidden]{display:none!important}
+.soft-tab-panel{padding:40px;border-radius:8px;border-bottom:0}
+.soft-tab-panel #soft-heading{font-size:clamp(30px,3.35vw,49px);line-height:1.22;letter-spacing:-1.8px;margin:0}
+@media(max-width:720px){.soft-tab-panel{padding:25px}.soft-tab-panel .soft-intro{flex-direction:column}.soft-tab-panel .soft-emblem{display:none}.soft-tab-panel #soft-heading{font-size:30px;letter-spacing:-1px}}
