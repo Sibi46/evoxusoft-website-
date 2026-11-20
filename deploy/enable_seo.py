@@ -28,9 +28,6 @@ routes = '''    location = /careers {
     location = /sitemap.xml {
         include /etc/nginx/snippets/evoxuind-jobs-proxy.conf;
     }
-    location = /index.html {
-        return 301 https://www.evoxuind.com/;
-    }
 '''
 new_site = old_site.replace('    location / {', routes + '    location / {', 1)
 # A return-only server-level conditional preserves the existing TLS settings.
