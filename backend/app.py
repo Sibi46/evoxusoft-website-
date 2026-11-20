@@ -3,10 +3,11 @@ import os
 import secrets
 import sqlite3
 import time
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from flask import Flask, abort, flash, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, Response, abort, flash, jsonify, redirect, render_template, request, session, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -226,6 +227,57 @@ def health():
     with db() as conn:
         conn.execute('SELECT 1').fetchone()
     return jsonify(status='ok')
+
+
+PUBLIC_ORIGIN = 'https://www.evoxuind.com'
+
+
+@app.get('/careers')
+@app.get('/careers/')
+def careers():
+    if request.path == '/careers':
+        return redirect('/careers/', code=301)
+    with db() as conn:
+        jobs = conn.execute("SELECT * FROM jobs WHERE status='open' ORDER BY created_at DESC,id DESC").fetchall()
+    return render_template('careers.html', jobs=jobs, canonical=PUBLIC_ORIGIN + '/careers/')
+
+
+@app.get('/careers/jobs/<int:job_id>')
+def career_job(job_id):
+    with db() as conn:
+        job = conn.execute("SELECT * FROM jobs WHERE id=? AND status='open'", (job_id,)).fetchone()
+    if job is None:
+        abort(404)
+    canonical = PUBLIC_ORIGIN + f'/careers/jobs/{job_id}'
+    schema = {
+        '@context': 'https://schema.org', '@type': 'WebPage', 'url': canonical,
+        'name': job['title'] + ' | EVOXU Careers',
+        'description': ' '.join(job['description'].split())[:160],
+        'isPartOf': {'@id': PUBLIC_ORIGIN + '/#website'},
+        'breadcrumb': {'@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': PUBLIC_ORIGIN + '/'},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Careers', 'item': PUBLIC_ORIGIN + '/careers/'},
+            {'@type': 'ListItem', 'position': 3, 'name': job['title'], 'item': canonical},
+        ]},
+    }
+    # Location is currently free text. Avoid incomplete JobPosting markup until
+    # verified structured location / remote-eligibility fields are available.
+    return render_template('career_job.html', job=job, canonical=canonical, schema=schema)
+
+
+@app.get('/sitemap.xml')
+def sitemap():
+    root = ET.Element('urlset', xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
+    for path in ('/', '/software-careers/', '/internships/', '/agripreneurship/', '/careers/'):
+        entry = ET.SubElement(root, 'url')
+        ET.SubElement(entry, 'loc').text = PUBLIC_ORIGIN + path
+    with db() as conn:
+        jobs = conn.execute("SELECT id,updated_at FROM jobs WHERE status='open' ORDER BY id").fetchall()
+    for job in jobs:
+        entry = ET.SubElement(root, 'url')
+        ET.SubElement(entry, 'loc').text = PUBLIC_ORIGIN + f"/careers/jobs/{job['id']}"
+        ET.SubElement(entry, 'lastmod').text = job['updated_at']
+    return Response(ET.tostring(root, encoding='utf-8', xml_declaration=True), mimetype='application/xml')
 
 
 if __name__ == '__main__':

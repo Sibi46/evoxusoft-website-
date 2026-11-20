@@ -46,13 +46,13 @@ async function loadJobs(){
   const response=await fetch('/api/jobs',{headers:{Accept:'application/json'},cache:'no-store'});
   if(!response.ok)throw new Error('Jobs unavailable');
   const data=await response.json();
-  if(!Array.isArray(data.jobs))throw new Error('Invalid jobs');
+  if(!Array.isArray(data.jobs))throw new Error('Invalid jobs');const requestedJob=new URLSearchParams(location.search).get('job');const selectedJob=data.jobs.find(job=>String(job.id)===requestedJob);if(selectedJob){document.querySelector('#interest').value='Careers & Training';document.querySelector('#application-job').value=selectedJob.title;document.querySelector('#form-status').textContent='Applying for: '+selectedJob.title;}
   jobList.replaceChildren();
   if(!data.jobs.length){const empty=document.createElement('p');empty.className='jobs-message';empty.textContent='No openings are published right now. You can still introduce yourself through our enquiry form.';jobList.append(empty);return;}
   for(const job of data.jobs){
    const card=document.createElement('article');card.className='public-job';
    const department=document.createElement('p');department.className='eyebrow';department.textContent=job.department;
-   const title=document.createElement('h3');title.textContent=job.title;
+   const title=document.createElement('h3');const jobLink=document.createElement('a');jobLink.href='/careers/jobs/'+job.id;jobLink.textContent=job.title;title.append(jobLink);
    const meta=document.createElement('p');meta.className='job-meta';meta.textContent=job.location+' | '+job.employment_type;
    const details=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View job details';
    const description=document.createElement('p');description.className='job-description';description.textContent=job.description;details.append(summary,description);

@@ -45,6 +45,36 @@ class JobAdminTests(unittest.TestCase):
         response = self.client.post('/admin/login', data={'csrf': token, 'username': 'evoxu', 'password': 'test-admin-password'}, base_url='https://localhost')
         self.assertEqual(response.status_code, 302)
 
+    def test_crawlable_careers_pages_and_sitemap_exclude_private_jobs(self):
+        self.login()
+        self.job(title='Published Software Intern')
+        self.job(title='Private draft', status='draft')
+        self.job(title='Closed vacancy', status='closed')
+        listing = self.client.get('/careers/').text
+        self.assertIn('Published Software Intern', listing)
+        self.assertNotIn('Private draft', listing)
+        self.assertNotIn('Closed vacancy', listing)
+        self.assertEqual(self.client.get('/careers').status_code, 301)
+        page = self.client.get('/careers/jobs/1')
+        self.assertEqual(page.status_code, 200)
+        self.assertIn('https://www.evoxuind.com/careers/jobs/1', page.text)
+        self.assertIn('/?job=1#contact', page.text)
+        self.assertNotIn('"@type": "JobPosting"', page.text)
+        self.assertEqual(self.client.get('/careers/jobs/2').status_code, 404)
+        self.assertEqual(self.client.get('/careers/jobs/3').status_code, 404)
+        import xml.etree.ElementTree as ET
+        xml = self.client.get('/sitemap.xml')
+        urls = [element.text for element in ET.fromstring(xml.data).iter() if element.tag.endswith('}loc')]
+        self.assertIn('https://www.evoxuind.com/software-careers/', urls)
+        self.assertIn('https://www.evoxuind.com/internships/', urls)
+        self.assertIn('https://www.evoxuind.com/agripreneurship/', urls)
+        self.assertIn('https://www.evoxuind.com/careers/jobs/1', urls)
+        self.assertNotIn('https://www.evoxuind.com/careers/jobs/2', urls)
+        token = self.csrf('/admin')
+        self.client.post('/admin/jobs/1/status', data={'csrf': token, 'status': 'closed'}, base_url='https://localhost')
+        self.assertEqual(self.client.get('/careers/jobs/1').status_code, 404)
+        self.assertNotIn('/careers/jobs/1', self.client.get('/sitemap.xml').text)
+
     def test_publish_edit_close_and_reopen(self):
         self.assertEqual(self.login().status_code, 302)
         self.assertEqual(self.job().status_code, 302)

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /thank-you.html
+
+Sitemap: https://www.evoxuind.com/sitemap.xml
